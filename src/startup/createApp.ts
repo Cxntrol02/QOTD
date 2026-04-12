@@ -3,6 +3,7 @@ import { loadEnv } from "../config/env";
 import { logger } from "../config/logger";
 import { prisma } from "../db/prisma";
 import { createCommandRegistry } from "../commands/registry";
+import { registerApplicationCommands } from "../commands/registerApplicationCommands";
 import { createEventRegistry } from "../events/registry";
 import { PrismaQuoteRepository } from "../repositories/prismaQuoteRepository";
 import { QuoteService } from "../services/quoteService";
@@ -32,6 +33,14 @@ export function createApp(): { start: () => Promise<void> } {
   return {
     async start(): Promise<void> {
       eventRegistry.registerAll();
+
+      try {
+        const scope = await registerApplicationCommands(commandRegistry, env);
+        logger.info({ scope }, "Slash commands registered on startup");
+      } catch (error) {
+        logger.warn({ error }, "Failed to register slash commands on startup");
+      }
+
       await client.login(env.DISCORD_TOKEN);
     }
   };

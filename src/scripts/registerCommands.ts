@@ -1,4 +1,3 @@
-import { REST, Routes } from "discord.js";
 import { loadEnv } from "../config/env";
 import { prisma } from "../db/prisma";
 import { PrismaQuoteRepository } from "../repositories/prismaQuoteRepository";
@@ -8,6 +7,7 @@ import { createCommandRegistry } from "../commands/registry";
 import { Client, GatewayIntentBits } from "discord.js";
 import { logger } from "../config/logger";
 import { QotdSettingsStore } from "../config/qotdSettingsStore";
+import { registerApplicationCommands } from "../commands/registerApplicationCommands";
 
 async function registerCommands(): Promise<void> {
   const env = loadEnv();
@@ -20,20 +20,8 @@ async function registerCommands(): Promise<void> {
   });
   const qotdJob = new DailyQotdJob(client, quoteService, env, logger, qotdSettingsStore);
   const registry = createCommandRegistry(quoteService, qotdJob);
-  const body = [...registry.values()].map((command) => command.data.toJSON());
-
-  const rest = new REST({ version: "10" }).setToken(env.DISCORD_TOKEN);
-
-  if (env.DISCORD_GUILD_ID) {
-    await rest.put(Routes.applicationGuildCommands(env.DISCORD_CLIENT_ID, env.DISCORD_GUILD_ID), {
-      body
-    });
-    console.log("Guild commands registered.");
-    return;
-  }
-
-  await rest.put(Routes.applicationCommands(env.DISCORD_CLIENT_ID), { body });
-  console.log("Global commands registered.");
+  const scope = await registerApplicationCommands(registry, env);
+  console.log(`${scope === "guild" ? "Guild" : "Global"} commands registered.`);
 }
 
 registerCommands().catch((error) => {
