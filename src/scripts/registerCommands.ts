@@ -7,13 +7,18 @@ import { DailyQotdJob } from "../jobs/dailyQotdJob";
 import { createCommandRegistry } from "../commands/registry";
 import { Client, GatewayIntentBits } from "discord.js";
 import { logger } from "../config/logger";
+import { QotdSettingsStore } from "../config/qotdSettingsStore";
 
 async function registerCommands(): Promise<void> {
   const env = loadEnv();
   const client = new Client({ intents: [GatewayIntentBits.Guilds] });
   const quoteRepo = new PrismaQuoteRepository(prisma);
   const quoteService = new QuoteService(quoteRepo);
-  const qotdJob = new DailyQotdJob(client, quoteService, env, logger);
+  const qotdSettingsStore = new QotdSettingsStore({
+    qotdChannelId: env.QOTD_CHANNEL_ID,
+    cronSchedule: env.CRON_SCHEDULE
+  });
+  const qotdJob = new DailyQotdJob(client, quoteService, env, logger, qotdSettingsStore);
   const registry = createCommandRegistry(quoteService, qotdJob);
   const body = [...registry.values()].map((command) => command.data.toJSON());
 

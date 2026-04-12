@@ -1,6 +1,6 @@
 # QOTD Discord Bot (TypeScript)
 
-A clean, modern Discord bot for managing quotes and posting a daily quote of the day.
+A clean, modern Discord bot for managing questions and posting a daily question of the day.
 
 ## Stack
 
@@ -71,9 +71,12 @@ qotd/
 
 ## Commands
 
-- `/quote add text:<quote> author:<optional>`
-- `/quote random`
+- `/question add text:<question> author:<optional>`
+- `/question random`
 - `/qotd post`
+- `/qotd setup channel:<#channel> time:<HH:mm>`
+
+`/qotd setup` saves your schedule in `qotd-settings.json`, so your configured channel/time persists across restarts.
 
 ## Quality Commands
 

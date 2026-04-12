@@ -32,7 +32,7 @@ class InMemoryQuoteRepository implements QuoteRepository {
 }
 
 describe("QuoteService", () => {
-  it("trims quote text before saving", async () => {
+  it("trims question text before saving", async () => {
     const service = new QuoteService(new InMemoryQuoteRepository());
 
     const quote = await service.addQuote({
@@ -43,11 +43,11 @@ describe("QuoteService", () => {
     expect(quote.text).toBe("Keep going.");
   });
 
-  it("throws when quote text is empty", async () => {
+  it("throws when question text is empty", async () => {
     const service = new QuoteService(new InMemoryQuoteRepository());
 
     await expect(service.addQuote({ text: "   ", addedById: "u1" })).rejects.toThrow(
-      "Quote text cannot be empty."
+      "Question text cannot be empty."
     );
   });
 });

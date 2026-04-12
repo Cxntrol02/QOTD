@@ -7,7 +7,7 @@ export class QuoteService {
     const trimmedText = input.text.trim();
     const trimmedAuthor = input.author?.trim();
     if (!trimmedText) {
-      throw new Error("Quote text cannot be empty.");
+      throw new Error("Question text cannot be empty.");
     }
 
     return this.quoteRepository.create({

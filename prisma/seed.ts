@@ -11,18 +11,18 @@ async function seed(): Promise<void> {
   await prisma.quote.createMany({
     data: [
       {
-        text: "Discipline is choosing between what you want now and what you want most.",
-        author: "Abraham Lincoln",
+        text: "What is one thing you can do today that your future self will thank you for?",
+        author: "QOTD",
         addedById: "seed"
       },
       {
-        text: "Small steps every day compound into big outcomes.",
-        author: "Unknown",
+        text: "What is a small habit that has made a big difference in your life?",
+        author: "QOTD",
         addedById: "seed"
       },
       {
-        text: "Stay consistent, even when motivation leaves.",
-        author: "Unknown",
+        text: "What challenge are you currently working through, and what are you learning from it?",
+        author: "QOTD",
         addedById: "seed"
       }
     ]

@@ -1,13 +1,13 @@
 import { EmbedBuilder } from "discord.js";
 import type { QuoteEntity } from "../repositories/quoteRepository";
 
-export function buildQuoteEmbed(quote: QuoteEntity): EmbedBuilder {
+export function buildQuestionEmbed(question: QuoteEntity): EmbedBuilder {
   return new EmbedBuilder()
     .setColor(0x1f8b4c)
-    .setTitle("Quote of the Day")
-    .setDescription(`"${quote.text}"`)
+    .setTitle("Question of the Day")
+    .setDescription(question.text)
     .setFooter({
-      text: quote.author ? `- ${quote.author}` : "- Unknown"
+      text: question.author ? `Asked by: ${question.author}` : "Asked by: Unknown"
     })
-    .setTimestamp(quote.createdAt);
+    .setTimestamp(question.createdAt);
 }
