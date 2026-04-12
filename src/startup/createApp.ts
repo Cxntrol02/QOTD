@@ -1,0 +1,33 @@
+import { Client, GatewayIntentBits } from "discord.js";
+import { loadEnv } from "../config/env";
+import { logger } from "../config/logger";
+import { prisma } from "../db/prisma";
+import { createCommandRegistry } from "../commands/registry";
+import { createEventRegistry } from "../events/registry";
+import { PrismaQuoteRepository } from "../repositories/prismaQuoteRepository";
+import { QuoteService } from "../services/quoteService";
+import { DailyQotdJob } from "../jobs/dailyQotdJob";
+
+export function createApp(): { start: () => Promise<void> } {
+  const env = loadEnv();
+  const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+  const quoteRepository = new PrismaQuoteRepository(prisma);
+  const quoteService = new QuoteService(quoteRepository);
+  const qotdJob = new DailyQotdJob(client, quoteService, env, logger);
+
+  const commandRegistry = createCommandRegistry(quoteService, qotdJob);
+  const eventRegistry = createEventRegistry({
+    client,
+    logger,
+    env,
+    commandRegistry,
+    qotdJob
+  });
+
+  return {
+    async start(): Promise<void> {
+      eventRegistry.registerAll();
+      await client.login(env.DISCORD_TOKEN);
+    }
+  };
+}
