@@ -15,4 +15,4 @@ if [ "${REGISTER_COMMANDS_ON_DEPLOY:-true}" = "true" ]; then
 fi
 
 echo "[deploy] Starting bot..."
-node dist/index.js
+exec node dist/index.js

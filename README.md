@@ -6,7 +6,7 @@ A clean, modern Discord bot for managing questions and posting a daily question 
 
 - Node.js + TypeScript
 - discord.js v14 (slash commands)
-- Prisma + SQLite
+- Prisma + PostgreSQL
 - node-cron scheduler
 - pino logging
 - Vitest + ESLint + Prettier
