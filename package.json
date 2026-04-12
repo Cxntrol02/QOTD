@@ -13,6 +13,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "seed": "tsx prisma/seed.ts",
+    "deploy:commands": "tsx src/scripts/deployCommands.ts",
     "bot:register": "tsx src/scripts/registerCommands.ts",
     "clean": "rimraf dist",
     "check:types": "tsc --noEmit"
