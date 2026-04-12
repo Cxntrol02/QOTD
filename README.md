@@ -83,4 +83,17 @@ qotd/
 - `npm run check:types`
 - `npm run lint`
 - `npm run test`
-- `npm run build`# QOTD
+- `npm run build`
+
+## Deploy Notes
+
+For container deploys (Dokploy), these optional env vars control startup behavior:
+
+- `DB_PUSH_ON_DEPLOY` (default `true`): run `prisma db push` during startup.
+- `DB_PUSH_MAX_RETRIES` (default `3`): number of retries when DB is unreachable.
+- `DB_PUSH_RETRY_DELAY_SECONDS` (default `5`): delay between retries.
+- `REQUIRE_DB_ON_STARTUP` (default `false`): if `true`, container exits when schema apply fails.
+
+Recommended for unstable/external DB links:
+
+- Set `REQUIRE_DB_ON_STARTUP=false` so the bot can still boot and reconnect behavior can be observed in logs.
